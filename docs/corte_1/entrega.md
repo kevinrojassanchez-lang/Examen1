@@ -113,29 +113,17 @@ Se eligió este caso porque la gestión de citas es una necesidad común en orga
 
 
 | Clase | Responsabilidad | Atributos principales |
-
 |---|---|---|
-
 | Persona | Representar la información común de las personas. Será una clase abstracta. | identificacion, nombre, telefono, correo |
-
 | Cliente | Representar a una persona que solicita citas. | Atributos heredados de Persona |
-
 | Profesional | Representar a un profesional que atiende citas. | especialidad, horario |
-
 | Servicio | Representar un servicio ofrecido por la organización. | codigo, nombre, duracion, precio |
-
 | Cita | Representar una cita entre un cliente y un profesional para un servicio. | cliente, profesional, servicio, fechaHora, estado |
-
 | GestorCitas | Administrar las citas y realizar las validaciones necesarias. | citas |
-
 | EstadoCita | Definir los estados posibles de una cita. | PROGRAMADA, ATENDIDA, CANCELADA, AUSENTE |
-
 | Especialidad | Definir las especialidades disponibles para los profesionales. | MEDICINA_GENERAL, PSICOLOGIA, ODONTOLOGIA, NUTRICION, FISIOTERAPIA |
-
 | Reprogramable | Definir el comportamiento que permite reprogramar una cita. Es una interfaz. | No posee atributos |
-
 | HorarioNoDisponibleException | Representar un error cuando un profesional no está disponible. | Mensaje de error heredado de Exception |
-
 | CitaNoModificableException | Representar un error cuando una cita no puede cancelarse o reprogramarse. | Mensaje de error heredado de Exception |
 
 
@@ -145,27 +133,16 @@ Se eligió este caso porque la gestión de citas es una necesidad común en orga
 
 
 | Clases relacionadas | Tipo | Multiplicidad | Explicación |
-
 |---|---|---|---|
-
 | Persona y Cliente | Herencia | Una superclase y una subclase | Cliente hereda los atributos y comportamientos comunes de Persona. |
-
 | Persona y Profesional | Herencia | Una superclase y una subclase | Profesional hereda los atributos y comportamientos comunes de Persona. |
-
 | Cliente y Cita | Asociación | Un Cliente puede tener cero o muchas Citas; cada Cita tiene un Cliente | Permite identificar a la persona que solicita cada cita. |
-
 | Profesional y Cita | Asociación | Un Profesional puede atender cero o muchas Citas; cada Cita tiene un Profesional | Permite organizar las citas de cada profesional. |
-
 | Servicio y Cita | Asociación | Un Servicio puede estar relacionado con cero o muchas Citas; cada Cita corresponde a un Servicio | Permite identificar el servicio solicitado en cada cita. |
-
 | GestorCitas y Cita | Agregación | Un GestorCitas administra cero o muchas Citas | Permite centralizar la administración y consulta de las citas. |
-
 | Cita y EstadoCita | Asociación mediante enumeración | Cada Cita tiene un EstadoCita | Permite controlar el estado actual de cada cita. |
-
 | Profesional y Especialidad | Asociación mediante enumeración | Cada Profesional tiene una Especialidad | Permite clasificar a los profesionales según su especialidad. |
-
 | Cita y Reprogramable | Implementación de interfaz | Una clase implementa una interfaz | Cita implementa el comportamiento definido por Reprogramable. |
-
 | GestorCitas y excepciones personalizadas | Dependencia | Un gestor puede utilizar las excepciones cuando corresponda | Permite comunicar errores relacionados con la disponibilidad y modificación de citas. |
 
 
@@ -351,9 +328,7 @@ Las excepciones personalizadas se encuentran en:
 
 
 | Integrante | Aportes principales |
-
 |---|---|
-
 | Kevin F. Rojas Sanchez | Trabajo individual: análisis del problema, identificación de requerimientos, diseño de clases y relaciones, elaboración del UML y desarrollo de la estructura inicial del sistema. |
 
 
