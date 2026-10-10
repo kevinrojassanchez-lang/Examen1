@@ -9,9 +9,7 @@ public class GestorCitas {
 
     private ArrayList<Cita> citas;
 
-    public GestorCitas() {
-        citas = new ArrayList<Cita>();
-    }
+    public GestorCitas() { citas = new ArrayList<Cita>(); }
 
     public void agregarCita(Cita cita)
             throws HorarioNoDisponibleException {
@@ -49,8 +47,7 @@ public class GestorCitas {
                     nuevaCita.getProfesional())
                     && existente.getEstado() == EstadoCita.PROGRAMADA) {
 
-                LocalDateTime inicioExistente =
-                    existente.getFechaHora();
+                LocalDateTime inicioExistente = existente.getFechaHora();
 
                 LocalDateTime finExistente = inicioExistente.plusMinutes(
                     existente.getServicio().getDuracion()
