@@ -20,4 +20,11 @@ public class Profesional extends Persona {
         this.especialidad = especialidad; }
 
     public void setHorario(String horario) { this.horario = horario; }
+    
+        @Override
+    public String mostrarInformacion() {
+        return "Profesional: " + getNombre()
+                + " | Especialidad: " + getEspecialidad()
+                + " | Horario: " + getHorario();
+    }
 }
