@@ -9,7 +9,9 @@ public class GestorCitas {
 
     private ArrayList<Cita> citas;
 
-    public GestorCitas() { citas = new ArrayList<Cita>(); }
+    public GestorCitas() {
+        citas = new ArrayList<Cita>();
+    }
 
     public void agregarCita(Cita cita)
             throws HorarioNoDisponibleException {
@@ -31,43 +33,45 @@ public class GestorCitas {
     }
 
     private void validarDisponibilidad(Cita nuevaCita, Cita ignorar)
-        throws HorarioNoDisponibleException {
+            throws HorarioNoDisponibleException {
 
-    LocalDateTime inicioNuevo = nuevaCita.getFechaHora();
-    LocalDateTime finNuevo = inicioNuevo.plusMinutes(
-        nuevaCita.getServicio().getDuracion()
-    );
+        LocalDateTime inicioNuevo = nuevaCita.getFechaHora();
 
-    for (int i = 0; i < citas.size(); i++) {
-        Cita existente = citas.get(i);
+        LocalDateTime finNuevo = inicioNuevo.plusMinutes(
+            nuevaCita.getServicio().getDuracion()
+        );
 
-        if (existente != ignorar) {
+        for (int i = 0; i < citas.size(); i++) {
 
-            if (existente.getProfesional().equals(
-                    nuevaCita.getProfesional())
-                    && existente.getEstado() == EstadoCita.PROGRAMADA) {
+            Cita existente = citas.get(i);
 
-                LocalDateTime inicioExistente = existente.getFechaHora();
+            if (existente != ignorar) {
 
-                LocalDateTime finExistente = inicioExistente.plusMinutes(
-                    existente.getServicio().getDuracion()
-                );
+                if (existente.getProfesional().equals(
+                        nuevaCita.getProfesional())
+                        && existente.getEstado() == EstadoCita.PROGRAMADA) {
 
-                boolean seTraslapan = inicioNuevo.isBefore(finExistente)
-                    && finNuevo.isAfter(inicioExistente);
+                    LocalDateTime inicioExistente = existente.getFechaHora();
 
-                if (seTraslapan) {
-                    
-                    throw new HorarioNoDisponibleException(
-                        "El profesional ya tiene una cita en ese horario."
-                    );
+                    LocalDateTime finExistente = inicioExistente.plusMinutes(
+                            existente.getServicio().getDuracion()
+                        );
+
+                    boolean seTraslapan = inicioNuevo.isBefore(finExistente)
+                        && finNuevo.isAfter(inicioExistente);
+
+                    if (seTraslapan) {
+                        throw new HorarioNoDisponibleException(
+                            "El profesional ya tiene una cita en ese horario."
+                        );
+                    }
                 }
             }
         }
     }
-}
 
     public ArrayList<Cita> listarCitas() {
+
         ArrayList<Cita> copia = new ArrayList<Cita>();
 
         for (int i = 0; i < citas.size(); i++) {
@@ -81,39 +85,48 @@ public class GestorCitas {
             throws CitaNoModificableException {
 
         if (cita == null || cita.getEstado() != EstadoCita.PROGRAMADA) {
-            
+
             throw new CitaNoModificableException(
                 "Solo se pueden cancelar citas programadas."
             );
         }
 
-        cita.setEstado(EstadoCita.CANCELADA);
+        // Se utiliza la interfaz Cancelable.
+        cita.cancelar();
     }
 
-    public void reprogramarCita(Cita cita, LocalDateTime nuevaFecha)
+    public void reprogramarCita(
+            Cita cita, LocalDateTime nuevaFecha)
             throws CitaNoModificableException,
                    HorarioNoDisponibleException {
 
         if (cita == null || cita.getEstado() != EstadoCita.PROGRAMADA) {
-            
+
             throw new CitaNoModificableException(
                 "Solo se pueden reprogramar citas programadas."
             );
         }
 
         if (nuevaFecha == null || !nuevaFecha.isAfter(LocalDateTime.now())) {
+
             throw new IllegalArgumentException(
                 "La nueva fecha debe ser futura."
             );
         }
 
         LocalDateTime fechaAnterior = cita.getFechaHora();
-        cita.setFechaHora(nuevaFecha);
+
+        // Se utiliza la interfaz Reprogramable.
+        cita.reprogramar(nuevaFecha);
 
         try {
-             validarDisponibilidad(cita, cita);
+            validarDisponibilidad(cita, cita);
+
         } catch (HorarioNoDisponibleException ex) {
+
+            // Si hay conflicto, se recupera la fecha original.
             cita.setFechaHora(fechaAnterior);
+
             throw ex;
         }
     }
@@ -122,7 +135,7 @@ public class GestorCitas {
             throws CitaNoModificableException {
 
         if (cita == null || cita.getEstado() != EstadoCita.PROGRAMADA) {
-            
+
             throw new CitaNoModificableException(
                 "Solo se pueden atender citas programadas."
             );
@@ -135,7 +148,7 @@ public class GestorCitas {
             throws CitaNoModificableException {
 
         if (cita == null || cita.getEstado() != EstadoCita.PROGRAMADA) {
-            
+
             throw new CitaNoModificableException(
                 "Solo se pueden marcar como ausentes citas programadas."
             );

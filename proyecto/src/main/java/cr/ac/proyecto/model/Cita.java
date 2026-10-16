@@ -1,8 +1,9 @@
 package cr.ac.proyecto.model;
 
+import cr.ac.proyecto.exception.CitaNoModificableException;
 import java.time.LocalDateTime;
 
-public class Cita implements Reprogramable {
+public class Cita implements Reprogramable, Cancelable {
 
     private Cliente cliente;
     private Profesional profesional;
@@ -10,9 +11,9 @@ public class Cita implements Reprogramable {
     private LocalDateTime fechaHora;
     private EstadoCita estado;
 
-    public Cita(Cliente cliente, Profesional profesional,Servicio servicio,
-            LocalDateTime fechaHora) {
-        
+    public Cita(Cliente cliente, Profesional profesional,
+            Servicio servicio, LocalDateTime fechaHora) {
+
         this.cliente = cliente;
         this.profesional = profesional;
         this.servicio = servicio;
@@ -25,13 +26,38 @@ public class Cita implements Reprogramable {
     public Servicio getServicio() { return servicio; }
     public LocalDateTime getFechaHora() { return fechaHora; }
     public EstadoCita getEstado() { return estado; }
+    public void setFechaHora(LocalDateTime fechaHora) {this.fechaHora = fechaHora; }
+    public void setEstado(EstadoCita estado) { this.estado = estado;}
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora; }
-    
     @Override
-    public void reprogramar(LocalDateTime nuevaFecha) {
-        this.fechaHora = nuevaFecha; }
+    public void reprogramar(LocalDateTime nuevaFecha)
+            throws CitaNoModificableException {
 
-    public void setEstado(EstadoCita estado) { this.estado = estado; }
+        if (estado != EstadoCita.PROGRAMADA) {
+            throw new CitaNoModificableException(
+                "Solo se pueden reprogramar citas programadas."
+            );
+        }
+
+        if (nuevaFecha == null) {
+            throw new IllegalArgumentException(
+                "La nueva fecha no puede ser nula."
+            );
+        }
+
+        this.fechaHora = nuevaFecha;
+    }
+
+    @Override
+    public void cancelar() throws CitaNoModificableException {
+
+        if (estado != EstadoCita.PROGRAMADA) {
+            throw new CitaNoModificableException(
+                "Solo se pueden cancelar citas programadas."
+            );
+        }
+
+        this.estado = EstadoCita.CANCELADA;
+    }    
 }
+
