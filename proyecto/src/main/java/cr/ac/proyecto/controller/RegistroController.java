@@ -25,7 +25,7 @@ import javafx.util.StringConverter;
 
 public class RegistroController {
 
-    private static final GestorCitas gestor = new GestorCitas();
+    private final GestorCitas gestor = App.getGestorCitas();
 
     private ArrayList<Profesional> profesionales =
             new ArrayList<Profesional>();

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import cr.ac.proyecto.model.GestorCitas;
 
 /**
  * Punto de entrada de la aplicación JavaFX.
@@ -16,6 +17,12 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+    
+    private static final GestorCitas gestor = new GestorCitas();
+
+    public static GestorCitas getGestorCitas() {
+        return gestor;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
